@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:credit_card_scanner/credit_card_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:text_recognition_test/bloc/card_scanner_bloc/card_scanner_bloc.dart';
 import 'package:text_recognition_test/bloc/image_processing_bloc/image_processing_bloc.dart';
-
-import '../../theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +20,7 @@ class _MyHomePageState extends State<HomeScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ImageProcessingBloc()),
+        BlocProvider(create: (context) => CardScannerBloc()),
       ],
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -63,6 +64,18 @@ class _MyHomePageState extends State<HomeScreen> {
                   onPressed: () => context.read<ImageProcessingBloc>()..add(ImageProcessed(ImageSource.gallery)),
                   child: const Text('Pick from Gallery'),
                 ),
+                ElevatedButton(
+                  onPressed: () => context.read<CardScannerBloc>()..add(CardScanned()),
+                  child: const Text('Scan Credit Card'),
+                ),
+                BlocBuilder<CardScannerBloc, CardScannerState>(builder: (context, state) {
+                  CardDetails? cardDetails;
+                  if (state is Scanning && state.cardDetails != null) {
+                    cardDetails = state.cardDetails;
+                    return Text(cardDetails.toString());
+                  }
+                  return const SizedBox();
+                }),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.3,
                   child: SingleChildScrollView(

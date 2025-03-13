@@ -1,7 +1,7 @@
+import 'package:card_scanner/card_scanner.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:credit_card_scanner/credit_card_scanner.dart';
 
 part 'card_scanner_event.dart';
 

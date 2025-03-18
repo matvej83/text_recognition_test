@@ -20,18 +20,21 @@ mixin _$CardScannerEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() cardScanned,
+    required TResult Function(String? text) cardScannedAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? cardScanned,
+    TResult? Function(String? text)? cardScannedAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? cardScanned,
+    TResult Function(String? text)? cardScannedAlt,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -39,18 +42,21 @@ mixin _$CardScannerEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(Started value) started,
     required TResult Function(CardScanned value) cardScanned,
+    required TResult Function(CardScannedAlt value) cardScannedAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Started value)? started,
     TResult? Function(CardScanned value)? cardScanned,
+    TResult? Function(CardScannedAlt value)? cardScannedAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Started value)? started,
     TResult Function(CardScanned value)? cardScanned,
+    TResult Function(CardScannedAlt value)? cardScannedAlt,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -120,6 +126,7 @@ class _$StartedImpl implements Started {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() cardScanned,
+    required TResult Function(String? text) cardScannedAlt,
   }) {
     return started();
   }
@@ -129,6 +136,7 @@ class _$StartedImpl implements Started {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? cardScanned,
+    TResult? Function(String? text)? cardScannedAlt,
   }) {
     return started?.call();
   }
@@ -138,6 +146,7 @@ class _$StartedImpl implements Started {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? cardScanned,
+    TResult Function(String? text)? cardScannedAlt,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -151,6 +160,7 @@ class _$StartedImpl implements Started {
   TResult map<TResult extends Object?>({
     required TResult Function(Started value) started,
     required TResult Function(CardScanned value) cardScanned,
+    required TResult Function(CardScannedAlt value) cardScannedAlt,
   }) {
     return started(this);
   }
@@ -160,6 +170,7 @@ class _$StartedImpl implements Started {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Started value)? started,
     TResult? Function(CardScanned value)? cardScanned,
+    TResult? Function(CardScannedAlt value)? cardScannedAlt,
   }) {
     return started?.call(this);
   }
@@ -169,6 +180,7 @@ class _$StartedImpl implements Started {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Started value)? started,
     TResult Function(CardScanned value)? cardScanned,
+    TResult Function(CardScannedAlt value)? cardScannedAlt,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -225,6 +237,7 @@ class _$CardScannedImpl implements CardScanned {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() cardScanned,
+    required TResult Function(String? text) cardScannedAlt,
   }) {
     return cardScanned();
   }
@@ -234,6 +247,7 @@ class _$CardScannedImpl implements CardScanned {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? cardScanned,
+    TResult? Function(String? text)? cardScannedAlt,
   }) {
     return cardScanned?.call();
   }
@@ -243,6 +257,7 @@ class _$CardScannedImpl implements CardScanned {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? cardScanned,
+    TResult Function(String? text)? cardScannedAlt,
     required TResult orElse(),
   }) {
     if (cardScanned != null) {
@@ -256,6 +271,7 @@ class _$CardScannedImpl implements CardScanned {
   TResult map<TResult extends Object?>({
     required TResult Function(Started value) started,
     required TResult Function(CardScanned value) cardScanned,
+    required TResult Function(CardScannedAlt value) cardScannedAlt,
   }) {
     return cardScanned(this);
   }
@@ -265,6 +281,7 @@ class _$CardScannedImpl implements CardScanned {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Started value)? started,
     TResult? Function(CardScanned value)? cardScanned,
+    TResult? Function(CardScannedAlt value)? cardScannedAlt,
   }) {
     return cardScanned?.call(this);
   }
@@ -274,6 +291,7 @@ class _$CardScannedImpl implements CardScanned {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Started value)? started,
     TResult Function(CardScanned value)? cardScanned,
+    TResult Function(CardScannedAlt value)? cardScannedAlt,
     required TResult orElse(),
   }) {
     if (cardScanned != null) {
@@ -288,12 +306,160 @@ abstract class CardScanned implements CardScannerEvent {
 }
 
 /// @nodoc
+abstract class _$$CardScannedAltImplCopyWith<$Res> {
+  factory _$$CardScannedAltImplCopyWith(_$CardScannedAltImpl value,
+          $Res Function(_$CardScannedAltImpl) then) =
+      __$$CardScannedAltImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String? text});
+}
+
+/// @nodoc
+class __$$CardScannedAltImplCopyWithImpl<$Res>
+    extends _$CardScannerEventCopyWithImpl<$Res, _$CardScannedAltImpl>
+    implements _$$CardScannedAltImplCopyWith<$Res> {
+  __$$CardScannedAltImplCopyWithImpl(
+      _$CardScannedAltImpl _value, $Res Function(_$CardScannedAltImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CardScannerEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? text = freezed,
+  }) {
+    return _then(_$CardScannedAltImpl(
+      freezed == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CardScannedAltImpl implements CardScannedAlt {
+  const _$CardScannedAltImpl(this.text);
+
+  @override
+  final String? text;
+
+  @override
+  String toString() {
+    return 'CardScannerEvent.cardScannedAlt(text: $text)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CardScannedAltImpl &&
+            (identical(other.text, text) || other.text == text));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, text);
+
+  /// Create a copy of CardScannerEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CardScannedAltImplCopyWith<_$CardScannedAltImpl> get copyWith =>
+      __$$CardScannedAltImplCopyWithImpl<_$CardScannedAltImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function() cardScanned,
+    required TResult Function(String? text) cardScannedAlt,
+  }) {
+    return cardScannedAlt(text);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function()? cardScanned,
+    TResult? Function(String? text)? cardScannedAlt,
+  }) {
+    return cardScannedAlt?.call(text);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function()? cardScanned,
+    TResult Function(String? text)? cardScannedAlt,
+    required TResult orElse(),
+  }) {
+    if (cardScannedAlt != null) {
+      return cardScannedAlt(text);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Started value) started,
+    required TResult Function(CardScanned value) cardScanned,
+    required TResult Function(CardScannedAlt value) cardScannedAlt,
+  }) {
+    return cardScannedAlt(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Started value)? started,
+    TResult? Function(CardScanned value)? cardScanned,
+    TResult? Function(CardScannedAlt value)? cardScannedAlt,
+  }) {
+    return cardScannedAlt?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Started value)? started,
+    TResult Function(CardScanned value)? cardScanned,
+    TResult Function(CardScannedAlt value)? cardScannedAlt,
+    required TResult orElse(),
+  }) {
+    if (cardScannedAlt != null) {
+      return cardScannedAlt(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CardScannedAlt implements CardScannerEvent {
+  const factory CardScannedAlt(final String? text) = _$CardScannedAltImpl;
+
+  String? get text;
+
+  /// Create a copy of CardScannerEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CardScannedAltImplCopyWith<_$CardScannedAltImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$CardScannerState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
+    required TResult Function(String? cardDetails) scanningAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -301,6 +467,7 @@ mixin _$CardScannerState {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
+    TResult? Function(String? cardDetails)? scanningAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -308,6 +475,7 @@ mixin _$CardScannerState {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
+    TResult Function(String? cardDetails)? scanningAlt,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -316,6 +484,7 @@ mixin _$CardScannerState {
     required TResult Function(Initial value) initial,
     required TResult Function(Waiting value) waiting,
     required TResult Function(Scanning value) scanning,
+    required TResult Function(ScanningAlt value) scanningAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -323,6 +492,7 @@ mixin _$CardScannerState {
     TResult? Function(Initial value)? initial,
     TResult? Function(Waiting value)? waiting,
     TResult? Function(Scanning value)? scanning,
+    TResult? Function(ScanningAlt value)? scanningAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -330,6 +500,7 @@ mixin _$CardScannerState {
     TResult Function(Initial value)? initial,
     TResult Function(Waiting value)? waiting,
     TResult Function(Scanning value)? scanning,
+    TResult Function(ScanningAlt value)? scanningAlt,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -400,6 +571,7 @@ class _$InitialImpl implements Initial {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
+    required TResult Function(String? cardDetails) scanningAlt,
   }) {
     return initial();
   }
@@ -410,6 +582,7 @@ class _$InitialImpl implements Initial {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
+    TResult? Function(String? cardDetails)? scanningAlt,
   }) {
     return initial?.call();
   }
@@ -420,6 +593,7 @@ class _$InitialImpl implements Initial {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
+    TResult Function(String? cardDetails)? scanningAlt,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -434,6 +608,7 @@ class _$InitialImpl implements Initial {
     required TResult Function(Initial value) initial,
     required TResult Function(Waiting value) waiting,
     required TResult Function(Scanning value) scanning,
+    required TResult Function(ScanningAlt value) scanningAlt,
   }) {
     return initial(this);
   }
@@ -444,6 +619,7 @@ class _$InitialImpl implements Initial {
     TResult? Function(Initial value)? initial,
     TResult? Function(Waiting value)? waiting,
     TResult? Function(Scanning value)? scanning,
+    TResult? Function(ScanningAlt value)? scanningAlt,
   }) {
     return initial?.call(this);
   }
@@ -454,6 +630,7 @@ class _$InitialImpl implements Initial {
     TResult Function(Initial value)? initial,
     TResult Function(Waiting value)? waiting,
     TResult Function(Scanning value)? scanning,
+    TResult Function(ScanningAlt value)? scanningAlt,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -511,6 +688,7 @@ class _$WaitingImpl implements Waiting {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
+    required TResult Function(String? cardDetails) scanningAlt,
   }) {
     return waiting();
   }
@@ -521,6 +699,7 @@ class _$WaitingImpl implements Waiting {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
+    TResult? Function(String? cardDetails)? scanningAlt,
   }) {
     return waiting?.call();
   }
@@ -531,6 +710,7 @@ class _$WaitingImpl implements Waiting {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
+    TResult Function(String? cardDetails)? scanningAlt,
     required TResult orElse(),
   }) {
     if (waiting != null) {
@@ -545,6 +725,7 @@ class _$WaitingImpl implements Waiting {
     required TResult Function(Initial value) initial,
     required TResult Function(Waiting value) waiting,
     required TResult Function(Scanning value) scanning,
+    required TResult Function(ScanningAlt value) scanningAlt,
   }) {
     return waiting(this);
   }
@@ -555,6 +736,7 @@ class _$WaitingImpl implements Waiting {
     TResult? Function(Initial value)? initial,
     TResult? Function(Waiting value)? waiting,
     TResult? Function(Scanning value)? scanning,
+    TResult? Function(ScanningAlt value)? scanningAlt,
   }) {
     return waiting?.call(this);
   }
@@ -565,6 +747,7 @@ class _$WaitingImpl implements Waiting {
     TResult Function(Initial value)? initial,
     TResult Function(Waiting value)? waiting,
     TResult Function(Scanning value)? scanning,
+    TResult Function(ScanningAlt value)? scanningAlt,
     required TResult orElse(),
   }) {
     if (waiting != null) {
@@ -650,6 +833,7 @@ class _$ScanningImpl implements Scanning {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
+    required TResult Function(String? cardDetails) scanningAlt,
   }) {
     return scanning(cardDetails);
   }
@@ -660,6 +844,7 @@ class _$ScanningImpl implements Scanning {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
+    TResult? Function(String? cardDetails)? scanningAlt,
   }) {
     return scanning?.call(cardDetails);
   }
@@ -670,6 +855,7 @@ class _$ScanningImpl implements Scanning {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
+    TResult Function(String? cardDetails)? scanningAlt,
     required TResult orElse(),
   }) {
     if (scanning != null) {
@@ -684,6 +870,7 @@ class _$ScanningImpl implements Scanning {
     required TResult Function(Initial value) initial,
     required TResult Function(Waiting value) waiting,
     required TResult Function(Scanning value) scanning,
+    required TResult Function(ScanningAlt value) scanningAlt,
   }) {
     return scanning(this);
   }
@@ -694,6 +881,7 @@ class _$ScanningImpl implements Scanning {
     TResult? Function(Initial value)? initial,
     TResult? Function(Waiting value)? waiting,
     TResult? Function(Scanning value)? scanning,
+    TResult? Function(ScanningAlt value)? scanningAlt,
   }) {
     return scanning?.call(this);
   }
@@ -704,6 +892,7 @@ class _$ScanningImpl implements Scanning {
     TResult Function(Initial value)? initial,
     TResult Function(Waiting value)? waiting,
     TResult Function(Scanning value)? scanning,
+    TResult Function(ScanningAlt value)? scanningAlt,
     required TResult orElse(),
   }) {
     if (scanning != null) {
@@ -722,5 +911,158 @@ abstract class Scanning implements CardScannerState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ScanningImplCopyWith<_$ScanningImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ScanningAltImplCopyWith<$Res> {
+  factory _$$ScanningAltImplCopyWith(
+          _$ScanningAltImpl value, $Res Function(_$ScanningAltImpl) then) =
+      __$$ScanningAltImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String? cardDetails});
+}
+
+/// @nodoc
+class __$$ScanningAltImplCopyWithImpl<$Res>
+    extends _$CardScannerStateCopyWithImpl<$Res, _$ScanningAltImpl>
+    implements _$$ScanningAltImplCopyWith<$Res> {
+  __$$ScanningAltImplCopyWithImpl(
+      _$ScanningAltImpl _value, $Res Function(_$ScanningAltImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CardScannerState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? cardDetails = freezed,
+  }) {
+    return _then(_$ScanningAltImpl(
+      freezed == cardDetails
+          ? _value.cardDetails
+          : cardDetails // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ScanningAltImpl implements ScanningAlt {
+  const _$ScanningAltImpl(this.cardDetails);
+
+  @override
+  final String? cardDetails;
+
+  @override
+  String toString() {
+    return 'CardScannerState.scanningAlt(cardDetails: $cardDetails)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ScanningAltImpl &&
+            (identical(other.cardDetails, cardDetails) ||
+                other.cardDetails == cardDetails));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, cardDetails);
+
+  /// Create a copy of CardScannerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ScanningAltImplCopyWith<_$ScanningAltImpl> get copyWith =>
+      __$$ScanningAltImplCopyWithImpl<_$ScanningAltImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() waiting,
+    required TResult Function(CardDetails? cardDetails) scanning,
+    required TResult Function(String? cardDetails) scanningAlt,
+  }) {
+    return scanningAlt(cardDetails);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? waiting,
+    TResult? Function(CardDetails? cardDetails)? scanning,
+    TResult? Function(String? cardDetails)? scanningAlt,
+  }) {
+    return scanningAlt?.call(cardDetails);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? waiting,
+    TResult Function(CardDetails? cardDetails)? scanning,
+    TResult Function(String? cardDetails)? scanningAlt,
+    required TResult orElse(),
+  }) {
+    if (scanningAlt != null) {
+      return scanningAlt(cardDetails);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Initial value) initial,
+    required TResult Function(Waiting value) waiting,
+    required TResult Function(Scanning value) scanning,
+    required TResult Function(ScanningAlt value) scanningAlt,
+  }) {
+    return scanningAlt(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Waiting value)? waiting,
+    TResult? Function(Scanning value)? scanning,
+    TResult? Function(ScanningAlt value)? scanningAlt,
+  }) {
+    return scanningAlt?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Initial value)? initial,
+    TResult Function(Waiting value)? waiting,
+    TResult Function(Scanning value)? scanning,
+    TResult Function(ScanningAlt value)? scanningAlt,
+    required TResult orElse(),
+  }) {
+    if (scanningAlt != null) {
+      return scanningAlt(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ScanningAlt implements CardScannerState {
+  const factory ScanningAlt(final String? cardDetails) = _$ScanningAltImpl;
+
+  String? get cardDetails;
+
+  /// Create a copy of CardScannerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScanningAltImplCopyWith<_$ScanningAltImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

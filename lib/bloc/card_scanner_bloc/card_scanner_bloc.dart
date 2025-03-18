@@ -18,5 +18,9 @@ class CardScannerBloc extends Bloc<CardScannerEvent, CardScannerState> {
       );
       emit(Scanning(cardDetails));
     });
+
+    on<CardScannedAlt>((event, emit) async {
+      emit(ScanningAlt(event.text ?? ''));
+    });
   }
 }

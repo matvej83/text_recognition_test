@@ -15,10 +15,10 @@ class ImageProcessingBloc extends Bloc<ImageProcessingEvent, ImageProcessingStat
   ImageProcessingBloc() : super(Initial()) {
     on<ImageProcessed>((event, emit) async {
       emit(const InProgress());
-      final image = await ImageService().pickImage(event.source);
+      final image = await getIt<ImageService>().pickImage(event.source);
       String? text;
       if (image != null) {
-        text = await ImageService().recognizeText(image);
+        text = await getIt<ImageService>().recognizeText(image);
       }
       emit(Processing(image: image, text: text));
     });

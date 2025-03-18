@@ -17,7 +17,6 @@ class _MyHomePageState extends State<RecogniseText> {
   Widget build(BuildContext context) {
     return BlocBuilder<ImageProcessingBloc, ImageProcessingState>(builder: (context, state) {
       File? image;
-      String text = '';
       if (state is InProgress) {
         return Center(
           child: SizedBox(
@@ -30,9 +29,6 @@ class _MyHomePageState extends State<RecogniseText> {
       if (state is Processing) {
         if (state.image != null) {
           image = state.image;
-        }
-        if (state.text != null) {
-          text = state.text!;
         }
       }
       return Align(

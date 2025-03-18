@@ -65,7 +65,9 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
       if (recognizedText.text.isNotEmpty && isCardNumberFound) {
         setState(() => _cardDetected = true);
         await _cameraController.stopImageStream();
-        context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText.text));
+        if (mounted) {
+          context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText.text));
+        }
         if (router.canPop()) {
           router.pop();
         }

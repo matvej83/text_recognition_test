@@ -5,4 +5,6 @@ class CardScannerEvent with _$CardScannerEvent {
   const factory CardScannerEvent.started() = Started;
 
   const factory CardScannerEvent.cardScanned() = CardScanned;
+
+  const factory CardScannerEvent.cardScannedAlt(String? text) = CardScannedAlt;
 }

@@ -7,4 +7,6 @@ class CardScannerState with _$CardScannerState {
   const factory CardScannerState.waiting() = Waiting;
 
   const factory CardScannerState.scanning(CardDetails? cardDetails) = Scanning;
+
+  const factory CardScannerState.scanningAlt(CardData? cardData) = ScanningAlt;
 }

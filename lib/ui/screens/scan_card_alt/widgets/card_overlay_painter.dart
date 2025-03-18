@@ -9,7 +9,7 @@ class CardOverlayPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint backgroundPaint = Paint()..color = Colors.black.withOpacity(0.5);
+    final Paint backgroundPaint = Paint()..color = Colors.black.withValues(alpha: 0.5);
     final Paint borderPaint = Paint()
       ..color = cardDetected ? Colors.green : Colors.white
       ..strokeWidth = 4

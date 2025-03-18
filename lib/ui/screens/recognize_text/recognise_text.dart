@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:card_scanner/models/card_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:text_recognition_test/bloc/card_scanner_bloc/card_scanner_bloc.dart';
 import 'package:text_recognition_test/bloc/image_processing_bloc/image_processing_bloc.dart';
 
 class RecogniseText extends StatefulWidget {

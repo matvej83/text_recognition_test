@@ -6,7 +6,7 @@ on:
 jobs:
   analyze-and-test:
     name: Analyze & Run Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # macos-latest - provide for iOS build
 
     steps:
       - name: Checkout Repository
@@ -27,11 +27,11 @@ jobs:
       - name: Run Tests
         run: flutter test
 
-      - name: Build APK
-        run: flutter build apk --release
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+#      - name: Build APK # Build iOS - provide for iOS
+#        run: flutter build apk --release # flutter build ios --no-codesign
+#
+#      - name: Upload APK
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: release-apk
+#          path: build/app/outputs/flutter-apk/app-release.apk

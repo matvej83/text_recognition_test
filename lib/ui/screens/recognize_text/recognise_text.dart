@@ -18,7 +18,7 @@ class _MyHomePageState extends State<RecogniseText> {
     return BlocBuilder<ImageProcessingBloc, ImageProcessingState>(builder: (context, state) {
       File? image;
       if (state is InProgress) {
-        return Center(
+        return const Center(
           child: SizedBox(
             width: 40,
             height: 40,
@@ -40,11 +40,11 @@ class _MyHomePageState extends State<RecogniseText> {
           children: [
             if (image != null) Expanded(child: Image.file(image)),
             ElevatedButton(
-              onPressed: () => context.read<ImageProcessingBloc>()..add(ImageProcessed(ImageSource.camera)),
+              onPressed: () => context.read<ImageProcessingBloc>()..add(const ImageProcessed(ImageSource.camera)),
               child: const Text('Capture Image'),
             ),
             ElevatedButton(
-              onPressed: () => context.read<ImageProcessingBloc>()..add(ImageProcessed(ImageSource.gallery)),
+              onPressed: () => context.read<ImageProcessingBloc>()..add(const ImageProcessed(ImageSource.gallery)),
               child: const Text('Pick from Gallery'),
             ),
           ],

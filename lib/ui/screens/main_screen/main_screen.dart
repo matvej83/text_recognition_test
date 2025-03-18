@@ -51,6 +51,16 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  String _getAppBarTitle(int index) {
+    switch (index) {
+      case 1:
+        return 'Card recognition';
+      case 2:
+        return 'Card Recognition alt';
+    }
+    return 'Text Recognition';
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -58,10 +68,18 @@ class _MainScreenState extends State<MainScreen> {
       lazy: false,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(),
-        body: IndexedStack(
-          index: _getCurrentIndex(context),
-          children: _screens.values.toList(),
+        appBar: AppBar(
+          title: Text(_getAppBarTitle(_getCurrentIndex(context))),
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          left: true,
+          right: true,
+          minimum: const EdgeInsets.only(left: 10, right: 10),
+          child: IndexedStack(
+            index: _getCurrentIndex(context),
+            children: _screens.values.toList(),
+          ),
         ),
         bottomNavigationBar: BottomNavBar(
           currentPage: _getCurrentIndex(context),

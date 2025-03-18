@@ -8,5 +8,5 @@ class CardScannerState with _$CardScannerState {
 
   const factory CardScannerState.scanning(CardDetails? cardDetails) = Scanning;
 
-  const factory CardScannerState.scanningAlt(String? cardDetails) = ScanningAlt;
+  const factory CardScannerState.scanningAlt(CardData? cardData) = ScanningAlt;
 }

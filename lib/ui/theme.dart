@@ -7,7 +7,7 @@ mixin AppTheme {
       shadowColor: Colors.transparent,
       backgroundColor: Colors.white,
     ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       showSelectedLabels: true,
       showUnselectedLabels: false,

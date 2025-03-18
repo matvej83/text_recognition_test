@@ -459,7 +459,7 @@ mixin _$CardScannerState {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
-    required TResult Function(String? cardDetails) scanningAlt,
+    required TResult Function(CardData? cardData) scanningAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -467,7 +467,7 @@ mixin _$CardScannerState {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
-    TResult? Function(String? cardDetails)? scanningAlt,
+    TResult? Function(CardData? cardData)? scanningAlt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -475,7 +475,7 @@ mixin _$CardScannerState {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
-    TResult Function(String? cardDetails)? scanningAlt,
+    TResult Function(CardData? cardData)? scanningAlt,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -571,7 +571,7 @@ class _$InitialImpl implements Initial {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
-    required TResult Function(String? cardDetails) scanningAlt,
+    required TResult Function(CardData? cardData) scanningAlt,
   }) {
     return initial();
   }
@@ -582,7 +582,7 @@ class _$InitialImpl implements Initial {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
-    TResult? Function(String? cardDetails)? scanningAlt,
+    TResult? Function(CardData? cardData)? scanningAlt,
   }) {
     return initial?.call();
   }
@@ -593,7 +593,7 @@ class _$InitialImpl implements Initial {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
-    TResult Function(String? cardDetails)? scanningAlt,
+    TResult Function(CardData? cardData)? scanningAlt,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -688,7 +688,7 @@ class _$WaitingImpl implements Waiting {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
-    required TResult Function(String? cardDetails) scanningAlt,
+    required TResult Function(CardData? cardData) scanningAlt,
   }) {
     return waiting();
   }
@@ -699,7 +699,7 @@ class _$WaitingImpl implements Waiting {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
-    TResult? Function(String? cardDetails)? scanningAlt,
+    TResult? Function(CardData? cardData)? scanningAlt,
   }) {
     return waiting?.call();
   }
@@ -710,7 +710,7 @@ class _$WaitingImpl implements Waiting {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
-    TResult Function(String? cardDetails)? scanningAlt,
+    TResult Function(CardData? cardData)? scanningAlt,
     required TResult orElse(),
   }) {
     if (waiting != null) {
@@ -833,7 +833,7 @@ class _$ScanningImpl implements Scanning {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
-    required TResult Function(String? cardDetails) scanningAlt,
+    required TResult Function(CardData? cardData) scanningAlt,
   }) {
     return scanning(cardDetails);
   }
@@ -844,7 +844,7 @@ class _$ScanningImpl implements Scanning {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
-    TResult? Function(String? cardDetails)? scanningAlt,
+    TResult? Function(CardData? cardData)? scanningAlt,
   }) {
     return scanning?.call(cardDetails);
   }
@@ -855,7 +855,7 @@ class _$ScanningImpl implements Scanning {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
-    TResult Function(String? cardDetails)? scanningAlt,
+    TResult Function(CardData? cardData)? scanningAlt,
     required TResult orElse(),
   }) {
     if (scanning != null) {
@@ -920,7 +920,9 @@ abstract class _$$ScanningAltImplCopyWith<$Res> {
           _$ScanningAltImpl value, $Res Function(_$ScanningAltImpl) then) =
       __$$ScanningAltImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String? cardDetails});
+  $Res call({CardData? cardData});
+
+  $CardDataCopyWith<$Res>? get cardData;
 }
 
 /// @nodoc
@@ -936,28 +938,42 @@ class __$$ScanningAltImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? cardDetails = freezed,
+    Object? cardData = freezed,
   }) {
     return _then(_$ScanningAltImpl(
-      freezed == cardDetails
-          ? _value.cardDetails
-          : cardDetails // ignore: cast_nullable_to_non_nullable
-              as String?,
+      freezed == cardData
+          ? _value.cardData
+          : cardData // ignore: cast_nullable_to_non_nullable
+              as CardData?,
     ));
+  }
+
+  /// Create a copy of CardScannerState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CardDataCopyWith<$Res>? get cardData {
+    if (_value.cardData == null) {
+      return null;
+    }
+
+    return $CardDataCopyWith<$Res>(_value.cardData!, (value) {
+      return _then(_value.copyWith(cardData: value));
+    });
   }
 }
 
 /// @nodoc
 
 class _$ScanningAltImpl implements ScanningAlt {
-  const _$ScanningAltImpl(this.cardDetails);
+  const _$ScanningAltImpl(this.cardData);
 
   @override
-  final String? cardDetails;
+  final CardData? cardData;
 
   @override
   String toString() {
-    return 'CardScannerState.scanningAlt(cardDetails: $cardDetails)';
+    return 'CardScannerState.scanningAlt(cardData: $cardData)';
   }
 
   @override
@@ -965,12 +981,12 @@ class _$ScanningAltImpl implements ScanningAlt {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ScanningAltImpl &&
-            (identical(other.cardDetails, cardDetails) ||
-                other.cardDetails == cardDetails));
+            (identical(other.cardData, cardData) ||
+                other.cardData == cardData));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, cardDetails);
+  int get hashCode => Object.hash(runtimeType, cardData);
 
   /// Create a copy of CardScannerState
   /// with the given fields replaced by the non-null parameter values.
@@ -986,9 +1002,9 @@ class _$ScanningAltImpl implements ScanningAlt {
     required TResult Function() initial,
     required TResult Function() waiting,
     required TResult Function(CardDetails? cardDetails) scanning,
-    required TResult Function(String? cardDetails) scanningAlt,
+    required TResult Function(CardData? cardData) scanningAlt,
   }) {
-    return scanningAlt(cardDetails);
+    return scanningAlt(cardData);
   }
 
   @override
@@ -997,9 +1013,9 @@ class _$ScanningAltImpl implements ScanningAlt {
     TResult? Function()? initial,
     TResult? Function()? waiting,
     TResult? Function(CardDetails? cardDetails)? scanning,
-    TResult? Function(String? cardDetails)? scanningAlt,
+    TResult? Function(CardData? cardData)? scanningAlt,
   }) {
-    return scanningAlt?.call(cardDetails);
+    return scanningAlt?.call(cardData);
   }
 
   @override
@@ -1008,11 +1024,11 @@ class _$ScanningAltImpl implements ScanningAlt {
     TResult Function()? initial,
     TResult Function()? waiting,
     TResult Function(CardDetails? cardDetails)? scanning,
-    TResult Function(String? cardDetails)? scanningAlt,
+    TResult Function(CardData? cardData)? scanningAlt,
     required TResult orElse(),
   }) {
     if (scanningAlt != null) {
-      return scanningAlt(cardDetails);
+      return scanningAlt(cardData);
     }
     return orElse();
   }
@@ -1056,9 +1072,9 @@ class _$ScanningAltImpl implements ScanningAlt {
 }
 
 abstract class ScanningAlt implements CardScannerState {
-  const factory ScanningAlt(final String? cardDetails) = _$ScanningAltImpl;
+  const factory ScanningAlt(final CardData? cardData) = _$ScanningAltImpl;
 
-  String? get cardDetails;
+  CardData? get cardData;
 
   /// Create a copy of CardScannerState
   /// with the given fields replaced by the non-null parameter values.

@@ -1,8 +1,9 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:text_recognition_test/services/credit_card_service.dart';
+import 'package:text_recognition_test/services/image_service.dart';
 
 import '../../../../bloc/card_scanner_bloc/card_scanner_bloc.dart';
 import '../../../navigation/app_router.dart';
@@ -31,7 +32,9 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
     );
 
     await _cameraController.initialize();
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
     setState(() {});
 
     _startCardDetection();
@@ -55,41 +58,25 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
 
   Future<void> _detectCard(CameraImage image) async {
     try {
-      final InputImage inputImage = _convertCameraImageToInputImage(image);
+      final InputImage inputImage = getIt<ImageService>().convertCameraImageToInputImage(image);
       final RecognizedText recognizedText = await _textRecognizer.processImage(inputImage);
+      final isCardNumberFound = CreditCardService().isValidCardNumber(recognizedText.text);
 
-      if (recognizedText.text.isNotEmpty) {
+      if (recognizedText.text.isNotEmpty && isCardNumberFound) {
         setState(() => _cardDetected = true);
+        await _cameraController.stopImageStream();
+        context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText.text));
+        if (router.canPop()) {
+          router.pop();
+        }
       } else {
         setState(() => _cardDetected = false);
-      }
-      await _cameraController.stopImageStream();
-      context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText.text));
-      if (router.canPop()) {
-        router.pop();
       }
     } catch (e) {
       debugPrint('Error detecting card: $e');
     } finally {
       _isProcessing = false;
     }
-  }
-
-  InputImage _convertCameraImageToInputImage(CameraImage image) {
-    final WriteBuffer allBytes = WriteBuffer();
-    for (Plane plane in image.planes) {
-      allBytes.putUint8List(plane.bytes);
-    }
-    final Uint8List bytes = allBytes.done().buffer.asUint8List();
-
-    final InputImageMetadata metadata = InputImageMetadata(
-      size: Size(image.width.toDouble(), image.height.toDouble()),
-      rotation: InputImageRotation.rotation0deg,
-      format: InputImageFormat.nv21,
-      bytesPerRow: image.planes[0].bytesPerRow,
-    );
-
-    return InputImage.fromBytes(bytes: bytes, metadata: metadata);
   }
 
   @override
@@ -108,7 +95,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     if (!_cameraController.value.isInitialized) {
-      return Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
       body: Stack(

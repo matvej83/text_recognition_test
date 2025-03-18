@@ -14,14 +14,14 @@ final GoRouter router = GoRouter(
     /// routes with bottom nav bar
     ShellRoute(
       builder: (context, state, child) {
-        return MainScreen();
+        return const MainScreen();
       },
       routes: [
-        GoRoute(path: Screens.recogniseText, builder: (context, state) => RecogniseText()),
-        GoRoute(path: Screens.scanCard, builder: (context, state) => ScanCard()),
+        GoRoute(path: Screens.recogniseText, builder: (context, state) => const RecogniseText()),
+        GoRoute(path: Screens.scanCard, builder: (context, state) => const ScanCard()),
         GoRoute(
           path: Screens.scanCardAlt,
-          builder: (context, state) => ScanCardAlt(),
+          builder: (context, state) => const ScanCardAlt(),
         ),
       ],
     ),

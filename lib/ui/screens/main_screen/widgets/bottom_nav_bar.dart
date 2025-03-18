@@ -14,7 +14,7 @@ class BottomNavBar extends StatelessWidget {
       onTap: onItemTap,
       showSelectedLabels: true,
       showUnselectedLabels: false,
-      items: <BottomNavigationBarItem>[
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.text_fields), label: 'Recognise Text'),
         BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: 'Scan Card'),
         BottomNavigationBarItem(icon: Icon(Icons.credit_card_sharp), label: 'Scan Card alt.'),

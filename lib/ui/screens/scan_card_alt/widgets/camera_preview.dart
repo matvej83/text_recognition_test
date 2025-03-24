@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -21,7 +22,6 @@ class CameraPreviewScreen extends StatefulWidget {
 class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
   late CameraController _cameraController;
   bool _isProcessing = false;
-  final TextRecognizer _textRecognizer = TextRecognizer();
   bool _cardDetected = false;
 
   Future<void> _initializeCamera() async {
@@ -31,13 +31,22 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
       enableAudio: false,
     );
 
-    await _cameraController.initialize();
-    if (!mounted) {
-      return;
-    }
-    setState(() {});
+    await _cameraController.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    }).catchError((Object e) {
+      if (e is CameraException) {
+        debugPrint(e.code);
+      }
+    });
 
-    _startCardDetection();
+    if (_cameraController.value.isInitialized) {
+      EasyDebounce.debounce('camera', const Duration(milliseconds: 500), () => _startCardDetection());
+    } else {
+      debugPrint('Camera error');
+    }
   }
 
   void _startCardDetection() {
@@ -59,14 +68,17 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
   Future<void> _detectCard(CameraImage image) async {
     try {
       final InputImage inputImage = getIt<ImageService>().convertCameraImageToInputImage(image);
-      final RecognizedText recognizedText = await _textRecognizer.processImage(inputImage);
-      final isCardNumberFound = CreditCardService().isValidCardNumber(recognizedText.text);
+      final recognizedText = await getIt<ImageService>().recognizeText(inputImage);
+      print(recognizedText);
+      final isCardNumberFound = CreditCardService().isValidCardNumber(recognizedText);
+      print('isCardNumberFound $isCardNumberFound');
 
-      if (recognizedText.text.isNotEmpty && isCardNumberFound) {
+      if (recognizedText.isNotEmpty && isCardNumberFound) {
         setState(() => _cardDetected = true);
         await _cameraController.stopImageStream();
         if (mounted) {
-          context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText.text));
+          print('going out');
+          context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText));
         }
         if (router.canPop()) {
           router.pop();
@@ -90,7 +102,6 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
   @override
   void dispose() {
     _cameraController.dispose();
-    _textRecognizer.close();
     super.dispose();
   }
 

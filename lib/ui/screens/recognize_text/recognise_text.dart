@@ -35,8 +35,9 @@ class _MyHomePageState extends State<RecogniseText> {
           text = state.text;
         }
       }
-      return SizedBox(
-        height: MediaQuery.sizeOf(context).height - kBottomNavigationBarHeight,
+      return Container(
+        height: MediaQuery.sizeOf(context).height - kBottomNavigationBarHeight - kToolbarHeight,
+        alignment: Alignment.center,
         child: SingleChildScrollView(
           child: Column(
             spacing: 10.0,

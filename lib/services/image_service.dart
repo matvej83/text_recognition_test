@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,8 +26,18 @@ class ImageService {
   CameraDescription? camera;
 
   Future<void> _initialiseCameras() async {
-    final cameras = await availableCameras();
-    camera = cameras.first;
+    List<CameraDescription> cameras = [];
+    try {
+      cameras = await availableCameras();
+      if (cameras.isNotEmpty) {
+        camera = cameras.first;
+        print('camera direction ${camera?.sensorOrientation}');
+      } else {
+        debugPrint('No cameras found');
+      }
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<File?> pickImage(ImageSource? source) async {
@@ -45,12 +56,11 @@ class ImageService {
     return null;
   }
 
-  Future<String> recognizeText(File? image) async {
-    if (image == null) {
+  Future<String> recognizeText(InputImage? inputImage) async {
+    if (inputImage == null) {
       return '';
     }
     try {
-      final inputImage = InputImage.fromFile(image);
       final textRecognizer = TextRecognizer();
       final RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
       textRecognizer.close();
@@ -61,15 +71,43 @@ class ImageService {
     return '';
   }
 
+  @Deprecated('not in use anymore')
   Future<XFile?> takePhoto(CameraController cameraController) async {
     final XFile? file;
     try {
-      file = await cameraController.takePicture();
-      return file;
+      if (cameraController.value.isInitialized) {
+        file = await cameraController.takePicture();
+        return file;
+      }
     } catch (e) {
       debugPrint('Error capturing image: $e');
     }
     return null;
+  }
+
+  Future<File> saveImageFromBytes(Uint8List bytes) async {
+    final directory = await getTemporaryDirectory();
+    final String filePath = '${directory.path}/captured_image.jpg';
+    final File file = File(filePath);
+    await file.writeAsBytes(bytes);
+    return file;
+  }
+
+  InputImageRotation getInputImageRotation(int sensorOrientation, CameraLensDirection lensDirection) {
+    switch (sensorOrientation) {
+      case 90:
+        return lensDirection == CameraLensDirection.front
+            ? InputImageRotation.rotation270deg
+            : InputImageRotation.rotation90deg;
+      case 180:
+        return InputImageRotation.rotation180deg;
+      case 270:
+        return lensDirection == CameraLensDirection.front
+            ? InputImageRotation.rotation90deg
+            : InputImageRotation.rotation270deg;
+      default:
+        return InputImageRotation.rotation0deg;
+    }
   }
 
   InputImage convertCameraImageToInputImage(CameraImage image) {
@@ -81,7 +119,7 @@ class ImageService {
 
     final InputImageMetadata metadata = InputImageMetadata(
       size: Size(image.width.toDouble(), image.height.toDouble()),
-      rotation: InputImageRotation.rotation0deg,
+      rotation: getInputImageRotation(camera!.sensorOrientation, camera!.lensDirection),
       format: InputImageFormat.nv21,
       bytesPerRow: image.planes[0].bytesPerRow,
     );

@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,7 +49,9 @@ class ImageService {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: source);
       if (pickedFile != null) {
-        return File(pickedFile.path);
+        final initialFile = File(pickedFile.path);
+        final rotatedImage = FlutterExifRotation.rotateAndSaveImage(path: initialFile.path);
+        return rotatedImage;
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -85,6 +88,7 @@ class ImageService {
     return null;
   }
 
+  @Deprecated('not in use anymore')
   Future<File> saveImageFromBytes(Uint8List bytes) async {
     final directory = await getTemporaryDirectory();
     final String filePath = '${directory.path}/captured_image.jpg';

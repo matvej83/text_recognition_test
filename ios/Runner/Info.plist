@@ -6,6 +6,8 @@
 	<string>This app uses photo library to get photo for recognition</string>
 	<key>NSCameraUsageDescription</key>
     <string>This app uses photo library to take photo for recognition</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We need access to save images</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>This app doesn't use microphone</string>
 	<key>CFBundleDevelopmentRegion</key>

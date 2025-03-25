@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:text_recognition_test/ui/navigation/app_router.dart';
@@ -20,7 +22,15 @@ class ScanCardAlt extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () => router.push(Screens.cameraPreview, extra: getIt<ImageService>().camera),
+            onPressed: () {
+              getIt<ImageService>().requestPermissions().then((granted) {
+                if (granted) {
+                  router.push(Screens.cameraPreview, extra: getIt<ImageService>().camera);
+                } else {
+                  debugPrint('Camera permission is not granted');
+                }
+              });
+            },
             child: const Text('Scan Credit Card'),
           ),
           BlocBuilder<CardScannerBloc, CardScannerState>(

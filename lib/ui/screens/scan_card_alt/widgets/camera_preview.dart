@@ -27,7 +27,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
   Future<void> _initializeCamera() async {
     _cameraController = CameraController(
       widget.camera,
-      ResolutionPreset.high,
+      ResolutionPreset.medium,
       enableAudio: false,
     );
 
@@ -67,7 +67,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
 
   Future<void> _detectCard(CameraImage image) async {
     try {
-      final InputImage inputImage = getIt<ImageService>().convertCameraImageToInputImage(image);
+      final InputImage inputImage = await getIt<ImageService>().convertCameraImageToInputImage(image);
       final recognizedText = await getIt<ImageService>().recognizeText(inputImage);
       print(recognizedText);
       final isCardNumberFound = CreditCardService().isValidCardNumber(recognizedText);

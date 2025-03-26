@@ -27,7 +27,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
   Future<void> _initializeCamera() async {
     _cameraController = CameraController(
       widget.camera,
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
       enableAudio: false,
     );
 
@@ -69,7 +69,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
     try {
       final InputImage inputImage = await getIt<ImageService>().convertCameraImageToInputImage(image);
       final recognizedText = await getIt<ImageService>().recognizeText(inputImage);
-      print(recognizedText);
+      print('recognizedText $recognizedText');
       final isCardNumberFound = CreditCardService().isValidCardNumber(recognizedText);
       print('isCardNumberFound $isCardNumberFound');
 
@@ -77,14 +77,15 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
         setState(() => _cardDetected = true);
         await _cameraController.stopImageStream();
         if (mounted) {
-          print('going out');
           context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText));
         }
         if (router.canPop()) {
           router.pop();
         }
       } else {
-        setState(() => _cardDetected = false);
+        if (mounted) {
+          setState(() => _cardDetected = false);
+        }
       }
     } catch (e) {
       debugPrint('Error detecting card: $e');

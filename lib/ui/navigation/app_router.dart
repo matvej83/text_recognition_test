@@ -7,6 +7,7 @@ import 'package:text_recognition_test/ui/screens/scan_card_alt/scan_card_alt.dar
 import 'package:text_recognition_test/ui/screens/scan_card_alt/widgets/camera_preview.dart';
 
 import '../screens/recognize_text/recognise_text.dart';
+import '../screens/test_camera/camera_preview_test.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: Screens.recogniseText,
@@ -30,6 +31,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: Screens.cameraPreview,
       builder: (context, state) => CameraPreviewScreen(camera: state.extra as CameraDescription),
+    ),
+    GoRoute(
+      path: Screens.cameraPreviewTest,
+      builder: (context, state) => CameraPreviewTest(camera: state.extra as CameraDescription),
     ),
   ],
 );

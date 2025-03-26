@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:text_recognition_test/ui/navigation/app_router.dart';
@@ -32,6 +30,12 @@ class ScanCardAlt extends StatelessWidget {
               });
             },
             child: const Text('Scan Credit Card'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              router.push(Screens.cameraPreviewTest, extra: getIt<ImageService>().camera);
+            },
+            child: const Text('Test Camera'),
           ),
           BlocBuilder<CardScannerBloc, CardScannerState>(
             buildWhen: (previous, current) {

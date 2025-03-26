@@ -69,9 +69,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
     try {
       final InputImage inputImage = await getIt<ImageService>().convertCameraImageToInputImage(image);
       final recognizedText = await getIt<ImageService>().recognizeText(inputImage);
-      debugPrint('recognizedText $recognizedText');
       final isCardNumberFound = CreditCardService().isValidCardNumber(recognizedText);
-      debugPrint('isCardNumberFound $isCardNumberFound');
 
       if (recognizedText.isNotEmpty && isCardNumberFound) {
         setState(() => _cardDetected = true);

@@ -8,7 +8,6 @@ import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 final getIt = GetIt.instance;
@@ -85,29 +84,6 @@ class ImageService {
     return '';
   }
 
-  @Deprecated('not in use anymore')
-  Future<XFile?> takePhoto(CameraController cameraController) async {
-    final XFile? file;
-    try {
-      if (cameraController.value.isInitialized) {
-        file = await cameraController.takePicture();
-        return file;
-      }
-    } catch (e) {
-      debugPrint('Error capturing image: $e');
-    }
-    return null;
-  }
-
-  @Deprecated('not in use anymore')
-  Future<File> saveImageFromBytes(Uint8List bytes) async {
-    final directory = await getTemporaryDirectory();
-    final String filePath = '${directory.path}/captured_image.jpg';
-    final File file = File(filePath);
-    await file.writeAsBytes(bytes);
-    return file;
-  }
-
   /// Detects device camera orientation
   InputImageRotation getInputImageRotation(int sensorOrientation, CameraLensDirection lensDirection) {
     switch (sensorOrientation) {
@@ -135,7 +111,7 @@ class ImageService {
       metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
         rotation: getInputImageRotation(camera!.sensorOrientation, camera!.lensDirection),
-        format: sdkVersion != null && sdkVersion! < 33 ? InputImageFormat.nv21 : InputImageFormat.yuv420,
+        format: Platform.isAndroid ? InputImageFormat.nv21 : InputImageFormat.bgra8888,
         // Converted to RGB
         bytesPerRow: image.planes[0].bytesPerRow,
       ),
@@ -187,8 +163,8 @@ class ImageService {
           }
         }
         return nv21;
-      } else if (image.format.group == ImageFormatGroup.bgra8888) {
-        /// BGRA8888 format (iOS)
+      } else if (image.format.group == ImageFormatGroup.bgra8888 || image.format.group == ImageFormatGroup.nv21) {
+        /// BGRA8888 format (iOS), nv21 format (some Android devices)
         return image.planes[0].bytes;
       } else {
         debugPrint('Unsupported image format: ${image.format.group}');

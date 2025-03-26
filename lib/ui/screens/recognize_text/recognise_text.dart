@@ -17,6 +17,7 @@ class _MyHomePageState extends State<RecogniseText> {
   Widget build(BuildContext context) {
     return BlocBuilder<ImageProcessingBloc, ImageProcessingState>(builder: (context, state) {
       File? image;
+      String? text;
       if (state is InProgress) {
         return const Center(
           child: SizedBox(
@@ -30,24 +31,31 @@ class _MyHomePageState extends State<RecogniseText> {
         if (state.image != null) {
           image = state.image;
         }
+        if (state.text != null) {
+          text = state.text;
+        }
       }
-      return Align(
+      return Container(
+        height: MediaQuery.sizeOf(context).height - kBottomNavigationBarHeight - kToolbarHeight,
         alignment: Alignment.center,
-        child: Column(
-          spacing: 10.0,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (image != null) Expanded(child: Image.file(image)),
-            ElevatedButton(
-              onPressed: () => context.read<ImageProcessingBloc>()..add(const ImageProcessed(ImageSource.camera)),
-              child: const Text('Capture Image'),
-            ),
-            ElevatedButton(
-              onPressed: () => context.read<ImageProcessingBloc>()..add(const ImageProcessed(ImageSource.gallery)),
-              child: const Text('Pick from Gallery'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            spacing: 10.0,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (image != null) Image.file(image),
+              ElevatedButton(
+                onPressed: () => context.read<ImageProcessingBloc>()..add(const ImageProcessed(ImageSource.camera)),
+                child: const Text('Capture Image'),
+              ),
+              ElevatedButton(
+                onPressed: () => context.read<ImageProcessingBloc>()..add(const ImageProcessed(ImageSource.gallery)),
+                child: const Text('Pick from Gallery'),
+              ),
+              if (text != null) Text(text),
+            ],
+          ),
         ),
       );
     });

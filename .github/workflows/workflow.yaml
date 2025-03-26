@@ -1,21 +1,24 @@
 name: Start actions
 on:
-  push:
-    branches: [ develop ]
-
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
 jobs:
   analyze-and-test:
     name: Analyze & Run Tests
-    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest # macos-latest - provide for iOS build
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.27.1  # Use latest stable Flutter version
+          flutter-version: 3.27.1
           channel: stable
 
       - name: Install Dependencies
@@ -26,3 +29,13 @@ jobs:
 
       - name: Run Tests
         run: flutter test
+
+
+#      - name: Build APK # Build iOS - provide for iOS
+#        run: flutter build apk --release # flutter build ios --no-codesign
+#
+#      - name: Upload APK
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: release-apk
+#          path: build/app/outputs/flutter-apk/app-release.apk

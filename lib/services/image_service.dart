@@ -2,10 +2,14 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final getIt = GetIt.instance;
 
@@ -20,13 +24,32 @@ class ImageService {
 
   static Future<void> initialise() async {
     await _instance._initialiseCameras();
+    if (Platform.isAndroid) {
+      await _instance._getSdkVersion();
+    }
   }
 
   CameraDescription? camera;
+  int? sdkVersion;
 
   Future<void> _initialiseCameras() async {
-    final cameras = await availableCameras();
-    camera = cameras.first;
+    List<CameraDescription> cameras = [];
+    try {
+      cameras = await availableCameras();
+      if (cameras.isNotEmpty) {
+        camera = cameras.first;
+      } else {
+        debugPrint('No cameras found');
+      }
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> _getSdkVersion() async {
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
+    sdkVersion = androidInfo.version.sdkInt;
   }
 
   Future<File?> pickImage(ImageSource? source) async {
@@ -37,7 +60,9 @@ class ImageService {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: source);
       if (pickedFile != null) {
-        return File(pickedFile.path);
+        final initialFile = File(pickedFile.path);
+        final rotatedImage = FlutterExifRotation.rotateAndSaveImage(path: initialFile.path);
+        return rotatedImage;
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -45,12 +70,11 @@ class ImageService {
     return null;
   }
 
-  Future<String> recognizeText(File? image) async {
-    if (image == null) {
+  Future<String> recognizeText(InputImage? inputImage) async {
+    if (inputImage == null) {
       return '';
     }
     try {
-      final inputImage = InputImage.fromFile(image);
       final textRecognizer = TextRecognizer();
       final RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
       textRecognizer.close();
@@ -61,32 +85,143 @@ class ImageService {
     return '';
   }
 
+  @Deprecated('not in use anymore')
   Future<XFile?> takePhoto(CameraController cameraController) async {
     final XFile? file;
     try {
-      file = await cameraController.takePicture();
-      return file;
+      if (cameraController.value.isInitialized) {
+        file = await cameraController.takePicture();
+        return file;
+      }
     } catch (e) {
       debugPrint('Error capturing image: $e');
     }
     return null;
   }
 
-  InputImage convertCameraImageToInputImage(CameraImage image) {
-    final WriteBuffer allBytes = WriteBuffer();
-    for (final Plane plane in image.planes) {
-      allBytes.putUint8List(plane.bytes);
-    }
-    final Uint8List bytes = allBytes.done().buffer.asUint8List();
+  @Deprecated('not in use anymore')
+  Future<File> saveImageFromBytes(Uint8List bytes) async {
+    final directory = await getTemporaryDirectory();
+    final String filePath = '${directory.path}/captured_image.jpg';
+    final File file = File(filePath);
+    await file.writeAsBytes(bytes);
+    return file;
+  }
 
-    final InputImageMetadata metadata = InputImageMetadata(
-      size: Size(image.width.toDouble(), image.height.toDouble()),
-      rotation: InputImageRotation.rotation0deg,
-      format: InputImageFormat.nv21,
-      bytesPerRow: image.planes[0].bytesPerRow,
+  /// Detects device camera orientation
+  InputImageRotation getInputImageRotation(int sensorOrientation, CameraLensDirection lensDirection) {
+    switch (sensorOrientation) {
+      case 90:
+        return lensDirection == CameraLensDirection.front
+            ? InputImageRotation.rotation270deg
+            : InputImageRotation.rotation90deg;
+      case 180:
+        return InputImageRotation.rotation180deg;
+      case 270:
+        return lensDirection == CameraLensDirection.front
+            ? InputImageRotation.rotation90deg
+            : InputImageRotation.rotation270deg;
+      default:
+        return InputImageRotation.rotation0deg;
+    }
+  }
+
+  /// Conversion is needed for google_ml_kit
+  Future<InputImage> convertCameraImageToInputImage(CameraImage image) async {
+    late Uint8List jpegBytes;
+    jpegBytes = convertCameraImageToUint8List(image)!;
+    final inputImage = InputImage.fromBytes(
+      bytes: jpegBytes,
+      metadata: InputImageMetadata(
+        size: Size(image.width.toDouble(), image.height.toDouble()),
+        rotation: getInputImageRotation(camera!.sensorOrientation, camera!.lensDirection),
+        format: sdkVersion != null && sdkVersion! < 33 ? InputImageFormat.nv21 : InputImageFormat.yuv420,
+        // Converted to RGB
+        bytesPerRow: image.planes[0].bytesPerRow,
+      ),
     );
 
-    return InputImage.fromBytes(bytes: bytes, metadata: metadata);
+    return inputImage;
+  }
+
+  /// Converts Camera image to Uint8List to use with google_ml_kit
+  ///
+  /// Android (YUV420 format):
+  /// Extracts Y, U, and V planes.
+  /// Converts them to NV21 format, which is widely supported.
+  ///
+  /// iOS (BGRA8888 format):
+  /// Directly returns the first plane, which contains the full image in BGRA format.
+  ///
+  /// Error Handling:
+  /// Prints errors if an unsupported format is encountered.
+  Uint8List? convertCameraImageToUint8List(CameraImage image) {
+    try {
+      if (image.format.group == ImageFormatGroup.yuv420) {
+        /// YUV420 format (Android & some iOS devices)
+        final int width = image.width;
+        final int height = image.height;
+        final int yRowStride = image.planes[0].bytesPerRow;
+        final int uvRowStride = image.planes[1].bytesPerRow;
+        final int uvPixelStride = image.planes[1].bytesPerPixel ?? 1;
+
+        final Uint8List yBuffer = image.planes[0].bytes;
+        final Uint8List uBuffer = image.planes[1].bytes;
+        final Uint8List vBuffer = image.planes[2].bytes;
+
+        final Uint8List nv21 = Uint8List(width * height + (width * height ~/ 2));
+
+        /// Copy Y channel
+        for (int i = 0; i < height; i++) {
+          nv21.setRange(i * width, (i + 1) * width, yBuffer.sublist(i * yRowStride, i * yRowStride + width));
+        }
+
+        /// Copy UV channels
+        int uvIndex = width * height;
+        for (int i = 0; i < height ~/ 2; i++) {
+          for (int j = 0; j < width ~/ 2; j++) {
+            final int uIndex = i * uvRowStride + j * uvPixelStride;
+            final int vIndex = i * uvRowStride + j * uvPixelStride;
+            nv21[uvIndex++] = vBuffer[vIndex]; // V
+            nv21[uvIndex++] = uBuffer[uIndex]; // U
+          }
+        }
+        return nv21;
+      } else if (image.format.group == ImageFormatGroup.bgra8888) {
+        /// BGRA8888 format (iOS)
+        return image.planes[0].bytes;
+      } else {
+        debugPrint('Unsupported image format: ${image.format.group}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('Error converting CameraImage to Uint8List: $e');
+      return null;
+    }
+  }
+
+  Future<bool> requestPermissions() async {
+    PermissionStatus? cameraStatus;
+    PermissionStatus? photosStatus;
+    if (Platform.isAndroid) {
+      if (sdkVersion! < 33) {
+        // permission storage is needed for android between 10 and 13
+        if (sdkVersion! > 29) {
+          final storageStatus = await Permission.storage.request();
+          return storageStatus.isGranted;
+        }
+        // for android 10 and before no permissions needed
+        return true;
+      }
+    }
+    cameraStatus = await Permission.camera.request();
+    photosStatus = await Permission.photos.request();
+    if (cameraStatus.isGranted && photosStatus.isGranted) {
+      return true;
+    } else {
+      debugPrint('Permissions denied: Camera: $cameraStatus, Photos: $photosStatus');
+      return false;
+    }
   }
 }
 

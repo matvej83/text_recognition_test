@@ -20,8 +20,22 @@ class ScanCardAlt extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () => router.push(Screens.cameraPreview, extra: getIt<ImageService>().camera),
+            onPressed: () {
+              getIt<ImageService>().requestPermissions().then((granted) {
+                if (granted) {
+                  router.push(Screens.cameraPreview, extra: getIt<ImageService>().camera);
+                } else {
+                  debugPrint('Camera permission is not granted');
+                }
+              });
+            },
             child: const Text('Scan Credit Card'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              router.push(Screens.cameraPreviewTest, extra: getIt<ImageService>().camera);
+            },
+            child: const Text('Test Camera'),
           ),
           BlocBuilder<CardScannerBloc, CardScannerState>(
             buildWhen: (previous, current) {

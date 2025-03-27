@@ -6,6 +6,7 @@ mixin AppTheme {
       elevation: 0,
       shadowColor: Colors.transparent,
       backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent, //prevent shadowing during the scrolling
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,

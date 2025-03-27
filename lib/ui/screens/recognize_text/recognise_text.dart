@@ -35,14 +35,11 @@ class _MyHomePageState extends State<RecogniseText> {
           text = state.text;
         }
       }
-      return Container(
-        height: MediaQuery.sizeOf(context).height - kBottomNavigationBarHeight - kToolbarHeight,
-        alignment: Alignment.center,
+      return Center(
         child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
             spacing: 10.0,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (image != null) Image.file(image),
               ElevatedButton(

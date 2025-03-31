@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:text_recognition_test/bloc/image_processing_bloc/image_processing_bloc.dart';
 
-import '../../../services/image_service.dart';
 import '../../navigation/app_router.dart';
 import '../../navigation/screens.dart';
 
@@ -51,7 +50,7 @@ class _MyHomePageState extends State<RecogniseText> {
               children: [
                 if (image != null) Image.file(image),
                 ElevatedButton(
-                  onPressed: () => router.push(Screens.cameraPreviewScreen, extra: getIt<ImageService>().camera),
+                  onPressed: () => router.push(Screens.cameraPreviewScreen),
                   child: const Text('Capture Image'),
                 ),
                 ElevatedButton(

@@ -29,6 +29,7 @@ class ImageService {
   }
 
   CameraDescription? camera;
+  CameraController? cameraController;
   int? sdkVersion;
 
   Future<void> _initialiseCameras() async {
@@ -51,6 +52,30 @@ class ImageService {
     sdkVersion = androidInfo.version.sdkInt;
   }
 
+  Future<void> initialiseCameraController() async {
+    try {
+      cameraController = CameraController(
+        camera!,
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
+      await cameraController?.initialize();
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  bool isCameraControllerInitialised() {
+    return cameraController != null && cameraController!.value.isInitialized;
+  }
+
+  Future<void> disposeCameraController() async {
+    await cameraController?.dispose();
+    cameraController = null;
+  }
+
+  /// This method uses only for taking image from gallery. ImagePicker causes unexpected crash when camera is used.
+  /// To get photo from camera we use camera library and takePhoto method
   Future<File?> pickImage(ImageSource? source) async {
     if (source == null) {
       return null;
@@ -65,6 +90,21 @@ class ImageService {
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<File?> takePhoto(CameraController cameraController) async {
+    final XFile? initialFile;
+    final File? file;
+    try {
+      if (cameraController.value.isInitialized) {
+        initialFile = await cameraController.takePicture();
+        file = File(initialFile.path);
+        return file;
+      }
+    } catch (e) {
+      debugPrint('Error capturing image: $e');
     }
     return null;
   }

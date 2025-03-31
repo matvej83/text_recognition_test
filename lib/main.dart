@@ -5,6 +5,7 @@ import 'package:text_recognition_test/ui/navigation/app_router.dart';
 import 'package:text_recognition_test/ui/theme.dart';
 
 import 'bloc/card_scanner_bloc/card_scanner_bloc.dart';
+import 'bloc/image_processing_bloc/image_processing_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +19,11 @@ class MyApp extends StatelessWidget with AppTheme {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CardScannerBloc(),
-      lazy: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => CardScannerBloc(), lazy: true),
+        BlocProvider(create: (context) => ImageProcessingBloc(), lazy: true)
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerConfig: router,

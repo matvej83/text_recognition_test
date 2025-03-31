@@ -1,13 +1,12 @@
-import 'package:camera/camera.dart';
 import 'package:go_router/go_router.dart';
 import 'package:text_recognition_test/ui/navigation/screens.dart';
 import 'package:text_recognition_test/ui/screens/main_screen/main_screen.dart';
 import 'package:text_recognition_test/ui/screens/scan_card/scan_card.dart';
 import 'package:text_recognition_test/ui/screens/scan_card_alt/scan_card_alt.dart';
-import 'package:text_recognition_test/ui/screens/scan_card_alt/widgets/camera_preview.dart';
+import 'package:text_recognition_test/ui/screens/scan_card_alt/widgets/card_reader_preview.dart';
 
+import '../screens/camera_preview_screen/camera_preview_screen.dart';
 import '../screens/recognize_text/recognise_text.dart';
-import '../screens/test_camera/camera_preview_test.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: Screens.recogniseText,
@@ -29,12 +28,12 @@ final GoRouter router = GoRouter(
 
     /// routes without bottom nav bar
     GoRoute(
-      path: Screens.cameraPreview,
-      builder: (context, state) => CameraPreviewScreen(camera: state.extra as CameraDescription),
+      path: Screens.cardReaderPreview,
+      builder: (context, state) => const CardReaderPreview(),
     ),
     GoRoute(
-      path: Screens.cameraPreviewTest,
-      builder: (context, state) => CameraPreviewTest(camera: state.extra as CameraDescription),
+      path: Screens.cameraPreviewScreen,
+      builder: (context, state) => const CameraPreviewScreen(),
     ),
   ],
 );

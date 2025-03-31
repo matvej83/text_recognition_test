@@ -10,23 +10,21 @@ import '../../../../bloc/card_scanner_bloc/card_scanner_bloc.dart';
 import '../../../navigation/app_router.dart';
 import 'card_overlay_painter.dart';
 
-class CameraPreviewScreen extends StatefulWidget {
-  const CameraPreviewScreen({super.key, required this.camera});
-
-  final CameraDescription camera;
+class CardReaderPreview extends StatefulWidget {
+  const CardReaderPreview({super.key});
 
   @override
-  State<CameraPreviewScreen> createState() => _CameraPreviewScreenState();
+  State<CardReaderPreview> createState() => _CardReaderPreviewState();
 }
 
-class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
+class _CardReaderPreviewState extends State<CardReaderPreview> {
   late CameraController _cameraController;
   bool _isProcessing = false;
   bool _cardDetected = false;
 
   Future<void> _initializeCamera() async {
     _cameraController = CameraController(
-      widget.camera,
+      getIt<ImageService>().camera!,
       ResolutionPreset.high,
       enableAudio: false,
     );
@@ -107,7 +105,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     if (!_cameraController.value.isInitialized) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
     }
     return Scaffold(
       body: Stack(

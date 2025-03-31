@@ -18,42 +18,32 @@ class CardReaderPreview extends StatefulWidget {
 }
 
 class _CardReaderPreviewState extends State<CardReaderPreview> {
-  late CameraController _cameraController;
   bool _isProcessing = false;
   bool _cardDetected = false;
 
   Future<void> _initializeCamera() async {
-    _cameraController = CameraController(
-      getIt<ImageService>().camera!,
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
-
-    await _cameraController.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    }).catchError((Object e) {
-      if (e is CameraException) {
-        debugPrint(e.code);
-      }
-    });
-
-    if (_cameraController.value.isInitialized) {
-      EasyDebounce.debounce('camera', const Duration(milliseconds: 500), () => _startCardDetection());
-    } else {
-      debugPrint('Camera error');
+    if (!getIt<ImageService>().isCameraControllerInitialised()) {
+      await getIt<ImageService>().initialiseCameraController().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      }).catchError((Object e) {
+        if (e is CameraException) {
+          debugPrint(e.code);
+        }
+      });
     }
+    EasyDebounce.debounce('camera', const Duration(milliseconds: 500), () => _startCardDetection());
   }
 
   void _startCardDetection() {
-    if (_cameraController.value.isStreamingImages) {
+    if (getIt<ImageService>().cameraController!.value.isStreamingImages) {
       debugPrint('Image stream already running.');
       return;
     }
 
-    _cameraController.startImageStream((CameraImage image) {
+    getIt<ImageService>().cameraController!.startImageStream((CameraImage image) {
       if (!_isProcessing) {
         _isProcessing = true;
         _detectCard(image).then((_) => _isProcessing = false);
@@ -71,7 +61,7 @@ class _CardReaderPreviewState extends State<CardReaderPreview> {
 
       if (recognizedText.isNotEmpty && isCardNumberFound) {
         setState(() => _cardDetected = true);
-        await _cameraController.stopImageStream();
+        await getIt<ImageService>().cameraController!.stopImageStream();
         if (mounted) {
           context.read<CardScannerBloc>().add(CardScannedAlt(recognizedText));
         }
@@ -98,19 +88,19 @@ class _CardReaderPreviewState extends State<CardReaderPreview> {
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    getIt<ImageService>().disposeCameraController();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_cameraController.value.isInitialized) {
+    if (!getIt<ImageService>().isCameraControllerInitialised()) {
       return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
     }
     return Scaffold(
       body: Stack(
         children: [
-          CameraPreview(_cameraController),
+          CameraPreview(getIt<ImageService>().cameraController!),
           CustomPaint(
             painter: CardOverlayPainter(_cardDetected),
             child: Container(),

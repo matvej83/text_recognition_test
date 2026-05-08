@@ -6,9 +6,7 @@ import 'package:text_recognition_test/services/credit_card_service.dart';
 import '../../models/card_data.dart';
 
 part 'card_scanner_bloc.freezed.dart';
-
 part 'card_scanner_event.dart';
-
 part 'card_scanner_state.dart';
 
 class CardScannerBloc extends Bloc<CardScannerEvent, CardScannerState> {

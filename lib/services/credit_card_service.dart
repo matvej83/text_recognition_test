@@ -7,7 +7,11 @@ class CreditCardService with Regexps {
     final expiryDate = detectData(text: text, regexp: Regexps.expiryDateRegex);
     final cvv = detectData(text: text, regexp: Regexps.cvvRegex);
 
-    return CardData(cardNumber: cardNumber?.replaceAll(Regexps.spacesAndHyphens, ''), expiryDate: expiryDate, cvv: cvv);
+    return CardData(
+      cardNumber: cardNumber?.replaceAll(Regexps.spacesAndHyphens, ''),
+      expiryDate: expiryDate,
+      cvv: cvv,
+    );
   }
 
   String? detectData({required String text, required RegExp regexp}) {
@@ -15,6 +19,10 @@ class CreditCardService with Regexps {
   }
 
   bool isValidCardNumber(String text) {
-    return detectData(text: text, regexp: Regexps.cardNumberRegex)?.isNotEmpty ?? false;
+    return detectData(
+          text: text,
+          regexp: Regexps.cardNumberRegex,
+        )?.isNotEmpty ??
+        false;
   }
 }

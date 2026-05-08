@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget with AppTheme {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => CardScannerBloc(), lazy: true),
-        BlocProvider(create: (context) => ImageProcessingBloc(), lazy: true)
+        BlocProvider(create: (context) => ImageProcessingBloc(), lazy: true),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

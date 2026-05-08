@@ -1,11 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'card_data.freezed.dart';
-
 part 'card_data.g.dart';
 
 @freezed
-class CardData with _$CardData {
+abstract class CardData with _$CardData {
   const factory CardData({
     String? cardNumber,
     String? expiryDate,
@@ -14,5 +13,6 @@ class CardData with _$CardData {
 
   const CardData._();
 
-  factory CardData.fromJson(Map<String, dynamic> json) => _$CardDataFromJson(json);
+  factory CardData.fromJson(Map<String, dynamic> json) =>
+      _$CardDataFromJson(json);
 }

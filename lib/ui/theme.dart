@@ -6,20 +6,15 @@ mixin AppTheme {
       elevation: 0,
       shadowColor: Colors.transparent,
       backgroundColor: Colors.white,
-      surfaceTintColor: Colors.transparent, //prevent shadowing during the scrolling
+      surfaceTintColor:
+          Colors.transparent, //prevent shadowing during the scrolling
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       showSelectedLabels: true,
       showUnselectedLabels: false,
-      selectedIconTheme: IconThemeData(
-        size: 24.0,
-        color: Colors.black,
-      ),
-      unselectedIconTheme: IconThemeData(
-        size: 24.0,
-        color: Colors.black12,
-      ),
+      selectedIconTheme: IconThemeData(size: 24.0, color: Colors.black),
+      unselectedIconTheme: IconThemeData(size: 24.0, color: Colors.black12),
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.black12,
       selectedLabelStyle: TextStyle(fontSize: 14),

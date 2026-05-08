@@ -8,12 +8,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:text_recognition_test/services/image_service.dart';
 
 part 'image_processing_bloc.freezed.dart';
-
 part 'image_processing_event.dart';
-
 part 'image_processing_state.dart';
 
-class ImageProcessingBloc extends Bloc<ImageProcessingEvent, ImageProcessingState> {
+class ImageProcessingBloc
+    extends Bloc<ImageProcessingEvent, ImageProcessingState> {
   ImageProcessingBloc() : super(const Initial()) {
     on<ImageProcessed>((event, emit) async {
       File? image;

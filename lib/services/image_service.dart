@@ -85,7 +85,9 @@ class ImageService {
       final pickedFile = await picker.pickImage(source: source);
       if (pickedFile != null) {
         final initialFile = File(pickedFile.path);
-        final rotatedImage = FlutterExifRotation.rotateAndSaveImage(path: initialFile.path);
+        final rotatedImage = FlutterExifRotation.rotateAndSaveImage(
+          path: initialFile.path,
+        );
         return rotatedImage;
       }
     } on Exception catch (e) {
@@ -115,7 +117,9 @@ class ImageService {
     }
     try {
       final textRecognizer = TextRecognizer();
-      final RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
+      final RecognizedText recognizedText = await textRecognizer.processImage(
+        inputImage,
+      );
       textRecognizer.close();
       return recognizedText.text;
     } on Exception catch (e) {
@@ -125,7 +129,10 @@ class ImageService {
   }
 
   /// Detects device camera orientation
-  InputImageRotation getInputImageRotation(int sensorOrientation, CameraLensDirection lensDirection) {
+  InputImageRotation getInputImageRotation(
+    int sensorOrientation,
+    CameraLensDirection lensDirection,
+  ) {
     switch (sensorOrientation) {
       case 90:
         return lensDirection == CameraLensDirection.front
@@ -150,8 +157,13 @@ class ImageService {
       bytes: jpegBytes,
       metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
-        rotation: getInputImageRotation(camera!.sensorOrientation, camera!.lensDirection),
-        format: Platform.isAndroid ? InputImageFormat.nv21 : InputImageFormat.bgra8888,
+        rotation: getInputImageRotation(
+          camera!.sensorOrientation,
+          camera!.lensDirection,
+        ),
+        format: Platform.isAndroid
+            ? InputImageFormat.nv21
+            : InputImageFormat.bgra8888,
         // Converted to RGB
         bytesPerRow: image.planes[0].bytesPerRow,
       ),
@@ -185,11 +197,17 @@ class ImageService {
         final Uint8List uBuffer = image.planes[1].bytes;
         final Uint8List vBuffer = image.planes[2].bytes;
 
-        final Uint8List nv21 = Uint8List(width * height + (width * height ~/ 2));
+        final Uint8List nv21 = Uint8List(
+          width * height + (width * height ~/ 2),
+        );
 
         /// Copy Y channel
         for (int i = 0; i < height; i++) {
-          nv21.setRange(i * width, (i + 1) * width, yBuffer.sublist(i * yRowStride, i * yRowStride + width));
+          nv21.setRange(
+            i * width,
+            (i + 1) * width,
+            yBuffer.sublist(i * yRowStride, i * yRowStride + width),
+          );
         }
 
         /// Copy UV channels
@@ -203,7 +221,8 @@ class ImageService {
           }
         }
         return nv21;
-      } else if (image.format.group == ImageFormatGroup.bgra8888 || image.format.group == ImageFormatGroup.nv21) {
+      } else if (image.format.group == ImageFormatGroup.bgra8888 ||
+          image.format.group == ImageFormatGroup.nv21) {
         /// BGRA8888 format (iOS), nv21 format (some Android devices)
         return image.planes[0].bytes;
       } else {
@@ -235,7 +254,9 @@ class ImageService {
     if (cameraStatus.isGranted && photosStatus.isGranted) {
       return true;
     } else {
-      debugPrint('Permissions denied: Camera: $cameraStatus, Photos: $photosStatus');
+      debugPrint(
+        'Permissions denied: Camera: $cameraStatus, Photos: $photosStatus',
+      );
       return false;
     }
   }

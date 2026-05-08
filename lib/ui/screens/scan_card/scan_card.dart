@@ -16,7 +16,8 @@ class ScanCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () => context.read<CardScannerBloc>()..add(const CardScanned()),
+            onPressed: () =>
+                context.read<CardScannerBloc>()..add(const CardScanned()),
             child: const Text('Scan Credit Card'),
           ),
           BlocBuilder<CardScannerBloc, CardScannerState>(

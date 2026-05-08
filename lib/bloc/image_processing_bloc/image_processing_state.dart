@@ -6,5 +6,6 @@ class ImageProcessingState with _$ImageProcessingState {
 
   const factory ImageProcessingState.inProgress() = InProgress;
 
-  const factory ImageProcessingState.processing({File? image, String? text}) = Processing;
+  const factory ImageProcessingState.processing({File? image, String? text}) =
+      Processing;
 }

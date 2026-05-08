@@ -23,18 +23,25 @@ class _CardReaderPreviewState extends State<CardReaderPreview> {
 
   Future<void> _initializeCamera() async {
     if (!getIt<ImageService>().isCameraControllerInitialised()) {
-      await getIt<ImageService>().initialiseCameraController().then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {});
-      }).catchError((Object e) {
-        if (e is CameraException) {
-          debugPrint(e.code);
-        }
-      });
+      await getIt<ImageService>()
+          .initialiseCameraController()
+          .then((_) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {});
+          })
+          .catchError((Object e) {
+            if (e is CameraException) {
+              debugPrint(e.code);
+            }
+          });
     }
-    EasyDebounce.debounce('camera', const Duration(milliseconds: 500), () => _startCardDetection());
+    EasyDebounce.debounce(
+      'camera',
+      const Duration(milliseconds: 500),
+      () => _startCardDetection(),
+    );
   }
 
   void _startCardDetection() {
@@ -43,7 +50,9 @@ class _CardReaderPreviewState extends State<CardReaderPreview> {
       return;
     }
 
-    getIt<ImageService>().cameraController!.startImageStream((CameraImage image) {
+    getIt<ImageService>().cameraController!.startImageStream((
+      CameraImage image,
+    ) {
       if (!_isProcessing) {
         _isProcessing = true;
         _detectCard(image).then((_) => _isProcessing = false);
@@ -55,9 +64,14 @@ class _CardReaderPreviewState extends State<CardReaderPreview> {
 
   Future<void> _detectCard(CameraImage image) async {
     try {
-      final InputImage inputImage = await getIt<ImageService>().convertCameraImageToInputImage(image);
-      final recognizedText = await getIt<ImageService>().recognizeText(inputImage);
-      final isCardNumberFound = CreditCardService().isValidCardNumber(recognizedText);
+      final InputImage inputImage = await getIt<ImageService>()
+          .convertCameraImageToInputImage(image);
+      final recognizedText = await getIt<ImageService>().recognizeText(
+        inputImage,
+      );
+      final isCardNumberFound = CreditCardService().isValidCardNumber(
+        recognizedText,
+      );
 
       if (recognizedText.isNotEmpty && isCardNumberFound) {
         setState(() => _cardDetected = true);
@@ -95,7 +109,9 @@ class _CardReaderPreviewState extends State<CardReaderPreview> {
   @override
   Widget build(BuildContext context) {
     if (!getIt<ImageService>().isCameraControllerInitialised()) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator.adaptive()),
+      );
     }
     return Scaffold(
       body: Stack(

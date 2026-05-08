@@ -54,7 +54,9 @@ class _MyHomePageState extends State<RecogniseText> {
                   child: const Text('Capture Image'),
                 ),
                 ElevatedButton(
-                  onPressed: () => context.read<ImageProcessingBloc>().add(const ImageProcessed(ImageSource.gallery)),
+                  onPressed: () => context.read<ImageProcessingBloc>().add(
+                    const ImageProcessed(ImageSource.gallery),
+                  ),
                   child: const Text('Pick from Gallery'),
                 ),
                 if (text != null) Text(text),

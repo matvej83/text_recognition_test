@@ -21,16 +21,19 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
     if (getIt<ImageService>().isCameraControllerInitialised()) {
       return;
     }
-    await getIt<ImageService>().initialiseCameraController().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    }).catchError((Object e) {
-      if (e is CameraException) {
-        debugPrint(e.code);
-      }
-    });
+    await getIt<ImageService>()
+        .initialiseCameraController()
+        .then((_) {
+          if (!mounted) {
+            return;
+          }
+          setState(() {});
+        })
+        .catchError((Object e) {
+          if (e is CameraException) {
+            debugPrint(e.code);
+          }
+        });
   }
 
   @override
@@ -44,20 +47,23 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
     return Scaffold(
       body: Center(
         child: FutureBuilder(
-            future: _initializeControllerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return CameraPreview(getIt<ImageService>().cameraController!);
-              } else {
-                return const Center(child: CircularProgressIndicator.adaptive());
-              }
-            }),
+          future: _initializeControllerFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return CameraPreview(getIt<ImageService>().cameraController!);
+            } else {
+              return const Center(child: CircularProgressIndicator.adaptive());
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: Colors.blue,
         onPressed: () {
-          context.read<ImageProcessingBloc>().add(const ImageProcessed(ImageSource.camera));
+          context.read<ImageProcessingBloc>().add(
+            const ImageProcessed(ImageSource.camera),
+          );
           if (router.canPop()) {
             router.pop();
           }

@@ -17,8 +17,14 @@ final GoRouter router = GoRouter(
         return const MainScreen();
       },
       routes: [
-        GoRoute(path: Screens.recogniseText, builder: (context, state) => const RecogniseText()),
-        GoRoute(path: Screens.scanCard, builder: (context, state) => const ScanCard()),
+        GoRoute(
+          path: Screens.recogniseText,
+          builder: (context, state) => const RecogniseText(),
+        ),
+        GoRoute(
+          path: Screens.scanCard,
+          builder: (context, state) => const ScanCard(),
+        ),
         GoRoute(
           path: Screens.scanCardAlt,
           builder: (context, state) => const ScanCardAlt(),
